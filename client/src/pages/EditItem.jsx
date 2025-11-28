@@ -1,0 +1,65 @@
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Box, Card, TextField, Button, Typography } from "@mui/material";
+
+function EditItem() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [title, setTitle] = useState("");
+  const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("");
+
+  useEffect(() => {
+    axios.get(`http://localhost:8080/api/material/${id}`)
+      .then(res => {
+        setTitle(res.data.title);
+        setPrice(res.data.price);
+        setCategory(res.data.category);
+      })
+      .catch(err => console.log(err));
+  }, []);
+
+  const updateHandler = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`http://localhost:8080/api/material/${id}`, {
+        title,
+        price,
+        category
+      });
+      alert("Item updated successfully");
+      navigate(`/item/${id}`);
+    } catch (error) {
+      alert("Failed to update");
+    }
+  };
+
+  return (
+    <Box display="flex" justifyContent="center" mt={5}>
+      <Card style={{ width: "400px", padding: "25px" }}>
+        <Typography variant="h6" align="center" mb={2}>
+          Edit Item Details
+        </Typography>
+
+        <form onSubmit={updateHandler}>
+          <TextField fullWidth label="Title" margin="normal"
+            value={title} onChange={(e) => setTitle(e.target.value)} />
+
+          <TextField fullWidth label="Price" margin="normal"
+            value={price} onChange={(e) => setPrice(e.target.value)} />
+
+          <TextField fullWidth label="Category" margin="normal"
+            value={category} onChange={(e) => setCategory(e.target.value)} />
+
+          <Button type="submit" variant="contained" fullWidth style={{ marginTop: "20px" }}>
+            Update
+          </Button>
+        </form>
+      </Card>
+    </Box>
+  );
+}
+
+export default EditItem;
