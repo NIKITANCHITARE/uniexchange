@@ -13,25 +13,36 @@ function EditItem() {
   const [category, setCategory] = useState("");
 
   useEffect(() => {
-    axios.get(`http://${API_BASE_URL}/api/material/${id}`)
+    // ❌ Wrong before:
+    // axios.get(`http://${API_BASE_URL}/api/material/${id}`)
+    // Reason: Using HTTP causes Mixed Content Errors & http inside backticks creates incorrect URL.
+
+    // ✔ FIX: Directly use API_BASE_URL which already contains https
+    axios.get(`${API_BASE_URL}/api/material/${id}`)
       .then(res => {
         setTitle(res.data.title);
         setPrice(res.data.price);
         setCategory(res.data.category);
       })
       .catch(err => console.log(err));
-  }, []);
+  }, [id]);  // 🔥 added id dependency to avoid React warning
 
   const updateHandler = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://${API_BASE_URL}/api/material/${id}`, {
+      // ❌ Wrong:
+      // axios.put(`http://${API_BASE_URL}/api/material/${id}`)
+
+      // ✔ FIX: Proper URL formatting
+      await axios.put(`${API_BASE_URL}/api/material/${id}`, {
         title,
         price,
         category
       });
+
       alert("Item updated successfully");
       navigate(`/item/${id}`);
+
     } catch (error) {
       alert("Failed to update");
     }

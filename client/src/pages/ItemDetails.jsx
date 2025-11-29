@@ -12,18 +12,20 @@ function ItemDetails() {
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
-    axios.get(`http://${API_BASE_URL}/api/material/${id}`)
-      .then(res => setItem(res.data))
-      .catch(err => console.log(err));
+    axios
+      .get(`${API_BASE_URL}/api/material/${id}`)
+      .then((res) => setItem(res.data))
+      .catch((err) => console.log(err));
   }, [id]);
 
-  if (!item) return <h2 style={{ textAlign: "center", marginTop: "50px" }}>Loading...</h2>;
+  if (!item)
+    return <h2 style={{ textAlign: "center", marginTop: "50px" }}>Loading...</h2>;
 
   const deleteItem = async () => {
     if (!window.confirm("Are you sure you want to delete?")) return;
 
     try {
-      await axios.delete(`http://${API_BASE_URL}/api/material/${id}`);
+      await axios.delete(`${API_BASE_URL}/api/material/${id}`);
       alert("Item deleted successfully");
       navigate("/");
     } catch (err) {
@@ -35,19 +37,24 @@ function ItemDetails() {
     <Box display="flex" justifyContent="center" mt={5}>
       <Card style={{ width: "500px", padding: "25px" }}>
         <img
-          src={`http://${API_BASE_URL}/uploads/${item.image}`}
+          src={`${API_BASE_URL}/uploads/${item.image}`}
           alt={item.title}
           style={{ width: "100%", borderRadius: "10px" }}
         />
 
-        <Typography variant="h4" mt={2}>{item.title}</Typography>
-        <Typography variant="h5" color="green">₹ {item.price}</Typography>
-        <Typography variant="subtitle1" mt={1}>Category: {item.category}</Typography>
+        <Typography variant="h4" mt={2}>
+          {item.title}
+        </Typography>
+        <Typography variant="h5" color="green">
+          ₹ {item.price}
+        </Typography>
+        <Typography variant="subtitle1" mt={1}>
+          Category: {item.category}
+        </Typography>
         <Typography>Logged User: {userId}</Typography>
         <Typography>Owner User: {item.user}</Typography>
 
-
-        {userId === item.user && (      // FIXED
+        {userId === item.user && (
           <>
             <Button
               variant="contained"

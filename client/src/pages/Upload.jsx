@@ -20,14 +20,19 @@ function Upload() {
     formData.append("category", category);
     formData.append("image", image);
 
-    await axios.post("http://${API_BASE_URL}/api/material/add", formData, {
-      headers: {
-        Authorization: token,
-        "Content-Type": "multipart/form-data",
-      }
-    });
+    try {
+      await axios.post(`${API_BASE_URL}/api/material/add`, formData, {
+        headers: {
+          Authorization: token,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-    alert("Item Uploaded Successfully!");
+      alert("Item Uploaded Successfully!");
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong!");
+    }
   };
 
   return (
@@ -38,13 +43,37 @@ function Upload() {
         </Typography>
 
         <form onSubmit={submitHandler}>
-          <TextField fullWidth label="Title" margin="normal" onChange={(e) => setTitle(e.target.value)} />
-          <TextField fullWidth label="Price" margin="normal" onChange={(e) => setPrice(e.target.value)} />
-          <TextField fullWidth label="Category" margin="normal" onChange={(e) => setCategory(e.target.value)} />
+          <TextField
+            fullWidth
+            label="Title"
+            margin="normal"
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            label="Price"
+            margin="normal"
+            onChange={(e) => setPrice(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            label="Category"
+            margin="normal"
+            onChange={(e) => setCategory(e.target.value)}
+          />
 
-          <input type="file" onChange={(e) => setImage(e.target.files[0])} style={{ marginTop: "15px" }} />
+          <input
+            type="file"
+            onChange={(e) => setImage(e.target.files[0])}
+            style={{ marginTop: "15px" }}
+          />
 
-          <Button type="submit" variant="contained" fullWidth style={{ marginTop: "20px" }}>
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            style={{ marginTop: "20px" }}
+          >
             Upload
           </Button>
         </form>

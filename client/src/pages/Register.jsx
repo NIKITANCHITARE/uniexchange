@@ -13,7 +13,11 @@ function Register() {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://${API_BASE_URL}/api/users/register", { name, email, password });
+      await axios.post(`${API_BASE_URL}/api/users/register`, {
+        name,
+        email,
+        password,
+      });
       alert("Account Created Successfully");
       navigate("/login");
     } catch (err) {
