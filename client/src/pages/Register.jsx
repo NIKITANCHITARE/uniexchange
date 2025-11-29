@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Box, Card, TextField, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config";
 
 function Register() {
   const [name, setName] = useState("");
@@ -12,7 +13,7 @@ function Register() {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/users/register", { name, email, password });
+      await axios.post("http://${API_BASE_URL}/api/users/register", { name, email, password });
       alert("Account Created Successfully");
       navigate("/login");
     } catch (err) {

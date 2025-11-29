@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Card, Typography, Button } from "@mui/material";
+import { API_BASE_URL } from "../config";
 
 function ItemDetails() {
   const { id } = useParams();
@@ -11,7 +12,7 @@ function ItemDetails() {
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/material/${id}`)
+    axios.get(`http://${API_BASE_URL}/api/material/${id}`)
       .then(res => setItem(res.data))
       .catch(err => console.log(err));
   }, [id]);
@@ -22,7 +23,7 @@ function ItemDetails() {
     if (!window.confirm("Are you sure you want to delete?")) return;
 
     try {
-      await axios.delete(`http://localhost:8080/api/material/${id}`);
+      await axios.delete(`http://${API_BASE_URL}/api/material/${id}`);
       alert("Item deleted successfully");
       navigate("/");
     } catch (err) {
@@ -34,7 +35,7 @@ function ItemDetails() {
     <Box display="flex" justifyContent="center" mt={5}>
       <Card style={{ width: "500px", padding: "25px" }}>
         <img
-          src={`http://localhost:8080/uploads/${item.image}`}
+          src={`http://${API_BASE_URL}/uploads/${item.image}`}
           alt={item.title}
           style={{ width: "100%", borderRadius: "10px" }}
         />

@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Box, Card, TextField, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config";
 
 function Login() {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ function Login() {
   const loginHandler = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8080/api/users/login", { email, password });
+      const res = await axios.post("http://${API_BASE_URL}/api/users/login", { email, password });
 
       // STORE TOKEN + USER DATA
       localStorage.setItem("token", res.data.token);

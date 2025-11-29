@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Box, Card, TextField, Button, Typography } from "@mui/material";
+import { API_BASE_URL } from "../config";
 
 function Upload() {
   const [title, setTitle] = useState("");
@@ -19,7 +20,7 @@ function Upload() {
     formData.append("category", category);
     formData.append("image", image);
 
-    await axios.post("http://localhost:8080/api/material/add", formData, {
+    await axios.post("http://${API_BASE_URL}/api/material/add", formData, {
       headers: {
         Authorization: token,
         "Content-Type": "multipart/form-data",

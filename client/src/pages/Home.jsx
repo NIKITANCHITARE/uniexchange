@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Card, CardMedia, CardContent, CardActions, Button, Typography, Chip, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config";
 
 function Home() {
   const [items, setItems] = useState([]);
@@ -9,7 +10,7 @@ function Home() {
 
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/material/all")
+    axios.get("http://${API_BASE_URL}/api/material/all")
   .then(res => setItems(res.data))
   .catch(err => console.log(err));
 
@@ -29,7 +30,7 @@ function Home() {
               <CardMedia 
                 component="img" 
                 height="200" 
-                image={`http://localhost:8080/uploads/${item.image}`} 
+                image={`http://${API_BASE_URL}/uploads/${item.image}`} 
               />
               <CardContent>
                 <Typography variant="h6" fontWeight="600">

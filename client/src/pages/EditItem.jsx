@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Card, TextField, Button, Typography } from "@mui/material";
+import { API_BASE_URL } from "../config";
 
 function EditItem() {
   const { id } = useParams();
@@ -12,7 +13,7 @@ function EditItem() {
   const [category, setCategory] = useState("");
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/material/${id}`)
+    axios.get(`http://${API_BASE_URL}/api/material/${id}`)
       .then(res => {
         setTitle(res.data.title);
         setPrice(res.data.price);
@@ -24,7 +25,7 @@ function EditItem() {
   const updateHandler = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8080/api/material/${id}`, {
+      await axios.put(`http://${API_BASE_URL}/api/material/${id}`, {
         title,
         price,
         category
