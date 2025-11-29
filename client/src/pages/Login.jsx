@@ -1,84 +1,46 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { Box, Card, Typography, Button } from "@mui/material";
+import { Box, Card, TextField, Button, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config";
 
-function ItemDetails() {
-  const { id } = useParams();
+function Login() {
   const navigate = useNavigate();
-  const [item, setItem] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const userId = localStorage.getItem("userId");
-
-  useEffect(() => {
-    axios
-      .get(`${API_BASE_URL}/api/material/${id}`)
-      .then((res) => setItem(res.data))
-      .catch((err) => console.log(err));
-  }, [id]);
-
-  if (!item)
-    return <h2 style={{ textAlign: "center", marginTop: "50px" }}>Loading...</h2>;
-
-  const deleteItem = async () => {
-    if (!window.confirm("Are you sure you want to delete?")) return;
-
+  const loginHandler = async (e) => {
+    e.preventDefault();
     try {
-      await axios.delete(`${API_BASE_URL}/api/material/${id}`);
-      alert("Item deleted successfully");
+      const res = await axios.post(`${API_BASE_URL}/api/users/login`, { email, password });
+
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("userId", res.data.user.id);
+
+      alert("Login Successful!");
       navigate("/");
     } catch (err) {
-      alert("Failed to delete");
+      alert(err.response?.data?.message || "Login Failed");
     }
   };
 
   return (
-    <Box display="flex" justifyContent="center" mt={5}>
-      <Card style={{ width: "500px", padding: "25px" }}>
-        <img
-          src={`${API_BASE_URL}/uploads/${item.image}`}
-          alt={item.title}
-          style={{ width: "100%", borderRadius: "10px" }}
-        />
-
-        <Typography variant="h4" mt={2}>
-          {item.title}
+    <Box display="flex" justifyContent="center" marginTop="40px">
+      <Card style={{ width: "350px", padding: "25px" }}>
+        <Typography variant="h6" align="center" marginBottom="15px">
+          Login to Account
         </Typography>
-        <Typography variant="h5" color="green">
-          ₹ {item.price}
-        </Typography>
-        <Typography variant="subtitle1" mt={1}>
-          Category: {item.category}
-        </Typography>
-        <Typography>Logged User: {userId}</Typography>
-        <Typography>Owner User: {item.user}</Typography>
-
-        {userId === item.user && (
-          <>
-            <Button
-              variant="contained"
-              color="error"
-              fullWidth
-              onClick={deleteItem}
-              style={{ marginTop: "20px" }}
-            >
-              Delete
-            </Button>
-
-            <Button
-              variant="outlined"
-              fullWidth
-              style={{ marginTop: "10px" }}
-              onClick={() => navigate(`/edit/${id}`)}
-            >
-              Edit Item
-            </Button>
-          </>
-        )}
+        <form onSubmit={loginHandler}>
+          <TextField fullWidth label="Email" margin="normal" onChange={(e) => setEmail(e.target.value)} />
+          <TextField type="password" fullWidth label="Password" margin="normal" onChange={(e) => setPassword(e.target.value)} />
+          <Button type="submit" variant="contained" fullWidth style={{ marginTop: "20px" }}>
+            Login
+          </Button>
+        </form>
       </Card>
     </Box>
   );
 }
 
-export default ItemDetails;
+export default Login;
